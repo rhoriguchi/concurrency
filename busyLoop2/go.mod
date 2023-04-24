@@ -1,3 +1,3 @@
-module onboarding/concurrency/busyLoop2
+module busyLoop2
 
 go 1.20

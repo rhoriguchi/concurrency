@@ -1,3 +1,3 @@
-module onboarding/concurrency/embeddingComposition
+module embeddingComposition
 
 go 1.20

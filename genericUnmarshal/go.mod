@@ -1,3 +1,3 @@
-module HALDE/genericUnmarshal
+module genericUnmarshal
 
 go 1.20
