@@ -20,8 +20,8 @@ func (a *AccountController) Transfer(from, to *entity.Account, amount float64, w
 	// nail this down for write lock promotion
 	currentFunds := from.Balance
 
-	// verify 'when' is in the future
-	if time.Now().After(when) {
+	// verify 'when' is not too far in the past
+	if time.Now().Add(-time.Second).After(when) {
 		return errors.New("can't transfer funds in the past")
 	}
 
