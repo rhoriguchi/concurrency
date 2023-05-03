@@ -45,6 +45,7 @@ func (a *AccountController) Transfer(from, to *entity.Account, amount float64, w
 
 	// FIXME potential deadlock
 	from.Mu.Lock()
+	time.Sleep(time.Millisecond)
 	to.Mu.Lock()
 	defer from.Mu.Unlock()
 	defer to.Mu.Unlock()
