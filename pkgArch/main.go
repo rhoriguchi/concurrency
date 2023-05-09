@@ -33,7 +33,7 @@ import (
 
 	Change the package layout to adhere to these 4 principles:
 
-	1. Root package is for domain types
+	1. Root package is for domain types (contradicts CLEAN architecture)
 	2. Group subpackages by dependency (AccountController uses UserController)
 	3. Use a shared mock subpackage
 	4. Main package ties together dependencies
