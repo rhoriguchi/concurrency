@@ -36,12 +36,6 @@ func process() {
 
 	monitor.RegisterFilter(filterRegId)
 
-	// accept incoming connections
-	err := monitor.Serve("localhost:"+port, writerRegId)
-	if err != nil {
-		panic(err)
-	}
-
 	fmt.Println("Catch me on TCP port 2023...")
 
 	// send timed messages
