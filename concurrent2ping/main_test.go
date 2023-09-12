@@ -17,6 +17,8 @@ var staticTestHostList = []ping.Host{
 	{"8", 0, nil},
 }
 
+// add parameter "--race" to run configuration
+
 func Test_pingAll(t *testing.T) {
 	// arrange
 	ch := make(chan ping.Host)

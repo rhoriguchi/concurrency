@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -16,9 +17,36 @@ import (
 )
 
 func pingAll(jobs chan ping.Host) (int, int) {
-	// TODO for every job provided by the input channel call Host.Ping() once
-	// TODO return the number of hosts that are reachable according to Host.Reachable and the number of all jobs
-	return 0, 0
+	reachableCount := make(chan bool)
+
+	var wg sync.WaitGroup
+
+	for host := range jobs {
+		wg.Add(1)
+
+		go func(h ping.Host) {
+			defer wg.Done()
+
+			h.Ping()
+			reachableCount <- h.Reachable != nil && *h.Reachable
+		}(host)
+	}
+
+	go func() {
+		wg.Wait()
+		close(reachableCount)
+	}()
+
+	totalReachable := 0
+	totalJobs := 0
+	for r := range reachableCount {
+		totalJobs++
+		if r {
+			totalReachable++
+		}
+	}
+
+	return totalReachable, totalJobs
 }
 
 const hostsFilename = "hosts.csv.bz2"
@@ -30,7 +58,7 @@ func main() {
 	startPing := time.Now()
 	fmt.Printf("loaded hosts from %v\n", hostsFilename)
 
-	hostCount, reachableCount := pingAll(jobCh)
+	reachableCount, hostCount := pingAll(jobCh)
 	stopPing := time.Now()
 
 	fmt.Printf("TIMING %v to parse %v hosts\n", startPing.Sub(startProg), hostCount)
