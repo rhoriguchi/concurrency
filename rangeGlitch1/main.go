@@ -10,6 +10,10 @@ import "fmt"
 		2. go build; i=0; while [ $i -lt 100 ]; do ./rangeGlitch1; let i++; done
 */
 
+// add env variable "GOEXPERIMENT=loopvar" to run configuration"
+//
+// export GOEXPERIMENT=loopvar; go build; i=0; while [ $i -lt 100 ]; do ./rangeGlitch1; let i++; done
+
 func isEvenNumber(n int) bool {
 	return n%2 == 0
 }

@@ -7,12 +7,19 @@ import (
 
 // FindInXMLString searches an XML document's content for a substring.
 // Element names and attribute names will be ignored.
+/*
+BUGS:
+ - r is 0, 1, ..., len(xml) => jump directly to last "else if" => ignores above requirement
+ - if above issue is fixed, still run into problem that it simply checks inclusion in 0xa5540012">
+serial ...0012 has been issued
+</start>
+*/
 func FindInXMLString(xml string, needle string) int {
 	var inElementTag bool
 	var inAttributeValue bool
 
 	var i int
-	for r := range xml {
+	for _, r := range xml {
 		if r == '<' && !inElementTag && !inAttributeValue {
 			inElementTag = true
 		} else if r == '>' && inElementTag && !inAttributeValue {
@@ -23,7 +30,7 @@ func FindInXMLString(xml string, needle string) int {
 			inAttributeValue = false
 		} else if !inElementTag || inAttributeValue {
 			if relIdx := strings.Index(xml[i:], needle); relIdx > -1 {
-				return i+relIdx
+				return i + relIdx
 			}
 		}
 
@@ -37,7 +44,6 @@ func main() {
 	xmldoc := `<start serial="0xa5540012">
 serial ...0012 has been issued
 </start>`
-
 	if FindInXMLString(xmldoc, "0012") > -1 {
 		fmt.Println("Good: found substring '0012' as part of an element's content.")
 	} else {

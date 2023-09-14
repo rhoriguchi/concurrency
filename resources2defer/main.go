@@ -19,24 +19,26 @@ func main() {
 	successCount := 0
 
 	for _, fname := range files {
-		f, err := os.Open(fname)
-		if err != nil {
-			fmt.Printf("failed to open %v\n", fname)
-			failCount++
-			continue
-		}
+		func() {
+			f, err := os.Open(fname)
+			if err != nil {
+				fmt.Printf("failed to open %v\n", fname)
+				failCount++
+				return
+			}
 
-		defer f.Close()
+			defer f.Close()
 
-		l, err := readFirstLine(f)
-		if err != nil {
-			fmt.Printf("failed to read from %v: %v\n", fname, err)
-			failCount++
-			continue
-		}
+			l, err := readFirstLine(f)
+			if err != nil {
+				fmt.Printf("failed to read from %v: %v\n", fname, err)
+				failCount++
+				return
+			}
 
-		fmt.Printf("%v: %v\n", fname, l)
-		successCount++
+			fmt.Printf("%v: %v\n", fname, l)
+			successCount++
+		}()
 	}
 
 	fmt.Printf("failed files: %v\n", failCount)
